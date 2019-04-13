@@ -1,0 +1,27 @@
+#	helm install --name prom --namespace observability -f prom-custom-values.yaml stable/prometheus-operator
+
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+grafana:
+  adminPassword: tacocat
+  persistence:
+    enabled: true
+    size: 5Gi
+
+# Use a port that's in the firewall range
+prometheus-node-exporter:
+  service:
+    port: 30206
+    targetPort: 30206
+
+# Master node not accessible
+kubeEtcd:
+  enabled: false
