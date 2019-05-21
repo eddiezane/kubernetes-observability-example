@@ -16,9 +16,6 @@ helm:
 prom:
 	helm install --name prom --namespace observability -f prom-custom-values.yaml stable/prometheus-operator
 
-clone-loki:
-	git clone git@github.com:grafana/loki.git
-
 loki:
 	helm install --name loki --namespace observability --set loki.persistence.enabled=true --set loki.persistence.size=5Gi --set loki.persistence.storageClassName=do-block-storage loki/loki-stack
 
