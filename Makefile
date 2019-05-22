@@ -1,5 +1,3 @@
-.PHONY: loki
-
 cluster:
 	doctl kubernetes cluster create k8s-shark-codes --region sfo2 --size s-4vcpu-8gb --count 5 --wait
 
