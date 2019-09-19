@@ -36,7 +36,7 @@ helm install --name loki --namespace observability --set loki.persistence.enable
 ```
 kubectl port-forward -n observability svc/prom-grafana 8080:80
 # Visit http://localhost:8080
-# Login with adimin tacocat
+# Login with admin tacocat
 # Add Loki data source as http://loki:3100
 ```
 
