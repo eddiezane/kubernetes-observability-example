@@ -2,7 +2,7 @@ cluster:
 	doctl kubernetes cluster create k8s-shark-codes --region sfo2 --size s-4vcpu-8gb --count 5 --wait
 
 emoji:
-	kubectl apply -f https://raw.githubusercontent.com/BuoyantIO/emojivoto/master/emojivoto.yml
+	kubectl apply -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
 
 helm:
 	helm repo add loki https://grafana.github.io/loki/charts
@@ -21,7 +21,7 @@ proxy:
 	kubectl port-forward -n observability svc/prom-grafana 8080:80
 
 clean:
-	kubectl delete -f https://raw.githubusercontent.com/BuoyantIO/emojivoto/master/emojivoto.yml
+	kubectl delete -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
 	helm delete prom --purge
 	helm delete loki --purge
 	kubectl delete crd prometheuses.monitoring.coreos.com                                                                                                                

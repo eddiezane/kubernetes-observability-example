@@ -2,7 +2,7 @@
 
 ```
 # https://github.com/BuoyantIO/emojivoto
-kubectl apply -f https://raw.githubusercontent.com/BuoyantIO/emojivoto/master/emojivoto.yml
+kubectl apply -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
 ```
 
 # Install Helm
@@ -43,7 +43,7 @@ kubectl port-forward -n observability svc/prom-grafana 8080:80
 # Cleanup
 
 ```
-kubectl delete -f https://raw.githubusercontent.com/BuoyantIO/emojivoto/master/emojivoto.yml
+kubectl delete -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
 helm delete prom --purge
 helm delete loki --purge
 kubectl delete crd prometheuses.monitoring.coreos.com
