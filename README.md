@@ -1,34 +1,31 @@
+**Note** that these instructions require Helm v3. For Helm v2 instructions please see [this branch](https://github.com/eddiezane/kubernetes-observability-example/tree/helm-2.0).
+
 # Install sample app
 
 ```
 # https://github.com/BuoyantIO/emojivoto
-kubectl apply -f https://raw.githubusercontent.com/BuoyantIO/emojivoto/master/emojivoto.yml
+kubectl apply -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
 ```
 
 # Install Helm
 
 ```
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo add loki https://grafana.github.io/loki/charts
 helm repo update
-kubectl --namespace kube-system create serviceaccount tiller
-kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-
-helm init --upgrade --service-account tiller
-
-# If you installed Helm without the Service Account first
-kubectl --namespace kube-system patch deploy tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
 ```
 
 # Install Prometheus Operator and Grafana
 
 ```
-helm install --name prom --namespace observability -f prom-custom-values.yaml stable/prometheus-operator
+kubectl create namespace observability
+helm install prom stable/prometheus-operator --namespace observability -f prom-custom-values.yaml
 ```
 
 # Install Loki
 
 ```
-helm install --name loki --namespace observability --set loki.persistence.enabled=true --set loki.persistence.size=5Gi --set loki.persistence.storageClassName=do-block-storage loki/loki-stack
+helm install loki loki/loki-stack --namespace observability --set loki.persistence.enabled=true --set loki.persistence.size=5Gi --set loki.persistence.storageClassName=do-block-storage
 ```
 
 # View
@@ -43,9 +40,9 @@ kubectl port-forward -n observability svc/prom-grafana 8080:80
 # Cleanup
 
 ```
-kubectl delete -f https://raw.githubusercontent.com/BuoyantIO/emojivoto/master/emojivoto.yml
-helm delete prom --purge
-helm delete loki --purge
+kubectl delete -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
+helm delete prom --namespace observability
+helm delete loki --namespace observability
 kubectl delete crd prometheuses.monitoring.coreos.com
 kubectl delete crd prometheusrules.monitoring.coreos.com
 kubectl delete crd servicemonitors.monitoring.coreos.com
