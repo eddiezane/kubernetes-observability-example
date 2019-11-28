@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: emojivoto-voting-svc
+  namespace: observability
+  labels:
+    release: prom
+spec:
+  selector:
+    matchLabels:
+      app: voting-svc
+  namespaceSelector:
+    matchNames:
+    - emojivoto
+  endpoints:
+  - port: prom
