@@ -2,7 +2,7 @@ cluster:
 	doctl kubernetes cluster create doks-observability --region fra1
 
 emoji:
-	kubectl apply -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
+	kubectl apply -k "github.com/eddiezane/emojivoto.git/kustomize/deployment?ref=workshop"
 
 helm:
 	helm repo add stable https://kubernetes-charts.storage.googleapis.com/
@@ -20,7 +20,7 @@ proxy:
 	kubectl port-forward -n observability svc/prom-grafana 8080:80
 
 clean:
-	kubectl delete -k github.com/BuoyantIO/emojivoto.git/kustomize/deployment
+	kubectl delete -k "github.com/eddiezane/emojivoto.git/kustomize/deployment?ref=workshop"
 	helm delete prom --namespace observability
 	helm delete loki --namespace observability
 	kubectl delete crd prometheuses.monitoring.coreos.com                                                                                                                
